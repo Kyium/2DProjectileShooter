@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class Proctile : MonoBehaviour
+public class Proctile : NetworkBehaviour
 {
     // Start is called before the first frame update
     private float damage = 10.0f;
