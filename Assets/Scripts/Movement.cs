@@ -1,35 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
+using UnityEngine.PlayerLoop;
 
-public class Movement : MonoBehaviour
+public class Movement : NetworkBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] private const float MovePerFrame = 0.04f;
 
-    private void Start()
-    {
-    }
-
     // Update is called once per frame
-    private void Update()
+    private void HandleMovement()
     {
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (isLocalPlayer)
         {
-            var position = this.transform.position;
-            position.x -= MovePerFrame;
-            this.transform.position = position;
-        } else if (Input.GetKey(KeyCode.RightArrow))
-        {
-            var position = this.transform.position;
-            position.x += MovePerFrame;
-            this.transform.position = position;
-        }
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                var position = this.transform.position;
+                position.x -= MovePerFrame;
+                this.transform.position = position;
+            }
+            else if (Input.GetKey(KeyCode.RightArrow))
+            {
+                var position = this.transform.position;
+                position.x += MovePerFrame;
+                this.transform.position = position;
+            }
 
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            this.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 280));
+            if (Input.GetKeyDown(KeyCode.UpArrow) && this.GetComponent<Rigidbody2D>().velocity.y == 0)
+            {
+                this.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 280));
+            }
         }
     }
 
+    void Update()
+    {
+        HandleMovement();
+    }
 }
