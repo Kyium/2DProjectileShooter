@@ -21,7 +21,6 @@ public class Proctile : NetworkBehaviour
     {
         if (collision.collider.name == "Player")
         {
-            
         }
     }
 }

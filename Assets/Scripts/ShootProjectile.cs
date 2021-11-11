@@ -19,10 +19,20 @@ public class ShootProjectile : NetworkBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                Instantiate(projectile,
-                    new Vector3(this.GetComponent<Transform>().position.x + 1,
-                        this.GetComponent<Transform>().position.y + 1, 0), Quaternion.identity);
+                CmdSpawnProjectile();
             }
         }
+    }
+
+    [Command]
+    public void CmdSpawnProjectile()
+    {
+        GameObject newProjectile = projectile;
+            newProjectile = Instantiate(newProjectile,
+                new Vector3(this.GetComponent<Transform>().position.x + 1,
+                    this.GetComponent<Transform>().position.y + 1, 0), Quaternion.identity);
+            newProjectile.GetComponent<Rigidbody2D>().AddForce(new Vector2(250, 150));
+            NetworkServer.Spawn(newProjectile);
+        
     }
 }

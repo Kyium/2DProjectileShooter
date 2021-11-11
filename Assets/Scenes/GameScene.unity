@@ -271,12 +271,13 @@ MonoBehaviour:
   onlineScene: 
   transport: {fileID: 550521449}
   networkAddress: localhost
-  maxConnections: 100
+  maxConnections: 16
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 8524632686831075510, guid: 92f64850f0643444e9dbc471f5782b92, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs: []
+  spawnPrefabs:
+  - {fileID: 5081539241674843937, guid: e508a5acb17a7c640beb56a8161930e4, type: 3}
 --- !u!4 &550521451
 Transform:
   m_ObjectHideFlags: 0
@@ -439,12 +440,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5328674844075004529, guid: 08c569820e6766149ae8ae6a97e39192, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.0038903
+      objectReference: {fileID: 0}
+    - target: {fileID: 5328674844075004529, guid: 08c569820e6766149ae8ae6a97e39192, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49
       objectReference: {fileID: 0}
     - target: {fileID: 5328674844075004529, guid: 08c569820e6766149ae8ae6a97e39192, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.6289
+      value: -3.993
       objectReference: {fileID: 0}
     - target: {fileID: 5328674844075004529, guid: 08c569820e6766149ae8ae6a97e39192, type: 3}
       propertyPath: m_LocalPosition.z
