@@ -17,8 +17,8 @@ public class Player : NetworkBehaviour
     private float FuelPerMoveFrame = 0.1f;
     private float FuelPerJump = 1.0f;
     private float JetpackPerFrame = 0.3f;
-    private float JetpackYVelocityPerFrame = 7;
-    private float JetpackMaxYVelocity = 140;
+    private float JetpackYVelocityPerFrame = 10;
+    private float JetpackMaxYVelocity = 30;
 
     // Start is called before the first frame update
     void Start()
@@ -66,7 +66,7 @@ public class Player : NetworkBehaviour
             {
                 CmdSpawnProjectile();
             }
-            if (Input.GetKey(KeyCode.UpArrow) && this.GetComponent<Rigidbody2D>().velocity.y != 0 && jetpack > 0)
+            if (Input.GetKey(KeyCode.DownArrow) && this.GetComponent<Rigidbody2D>().velocity.y != 0 && jetpack > 0)
             {
                 if (this.GetComponent<Rigidbody2D>().velocity.y < JetpackMaxYVelocity)
                 {
