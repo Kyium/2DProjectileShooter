@@ -4,26 +4,49 @@ using UnityEngine;
 using Mirror;
 using UnityEngine.UI;
 using System;
+using Unity.Mathematics;
+using UnityEngine.SceneManagement;
 
 public class Player : NetworkBehaviour
 {
-    [SerializeField] const float MovePerFrame = 0.03f;
-    [SerializeField] GameObject projectile;
+    [SerializeField] private float MovePerFrame = 0.03f;
+    [SerializeField] private GameObject projectile;
+    [SerializeField] private Sprite aliveSprite;
     [SerializeField] private Sprite deadSprite;
+    [SerializeField] private GameObject selectButton;
     private float health = 100f;
     private float fuel = 150f;
     private float jetpack = 80f;
     private bool isDead = false;
-    private float FuelPerMoveFrame = 0.1f;
-    private float FuelPerJump = 1.0f;
-    private float JetpackPerFrame = 0.3f;
-    private float JetpackYVelocityPerFrame = 10;
-    private float JetpackMaxYVelocity = 30;
+    private bool activated = true;
+    private readonly float FuelPerMoveFrame = 0.1f;
+    private readonly float FuelPerJump = 1.0f;
+    private readonly float JetpackPerFrame = 0.3f;
+    private readonly float JetpackYVelocityPerFrame = 10;
+    private readonly float JetpackMaxYVelocity = 30;
+    private Vector3 initialPosition;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        initialPosition = this.GetComponent<Transform>().position;
+        if (isServer)
+        {
+            // CmdSpawnServerControls();
+        }
+
+        if (activated)
+        {
+            this.GetComponent<Rigidbody2D>().simulated = true;
+        }
+    }
+
+    [Command]
+    void CmdSpawnServerControls()
+    {
+        selectButton = Instantiate(selectButton, new Vector3(0, 0, 0), Quaternion.identity);
+        NetworkServer.Spawn(selectButton, connectionToClient);
+        selectButton.GetComponent<NetworkIdentity>().AssignClientAuthority(connectionToClient);
     }
 
     // Update is called once per frame
@@ -79,7 +102,7 @@ public class Player : NetworkBehaviour
     }
 
     [Command]
-    public void CmdSpawnProjectile()
+    private void CmdSpawnProjectile()
     {
         GameObject newProjectile = projectile;
         newProjectile = Instantiate(newProjectile,
@@ -91,18 +114,18 @@ public class Player : NetworkBehaviour
     }
 
     [Command]
-    public void CmdDespawnProjectile(GameObject projectileToDestroy)
+    private void CmdDestroyProjectile(GameObject projectileToDestroy)
     {
         NetworkServer.Destroy(projectileToDestroy);
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.gameObject.name.Contains("Projectile"))
         {
             this.health -= collision.collider.gameObject.GetComponent<Projectile>().getDamage();
             deadCheck();
-            CmdDespawnProjectile(collision.collider.gameObject);
+            CmdDestroyProjectile(collision.collider.gameObject);
             updateLocalUI();
         }
     }
@@ -130,5 +153,20 @@ public class Player : NetworkBehaviour
             }
 
         }
+    }
+
+    private void activate()
+    {
+        activated = true;
+        this.GetComponent<Rigidbody2D>().simulated = true;
+        this.GetComponent<SpriteRenderer>().sprite = aliveSprite;
+    }
+
+    private void deactivate()
+    {
+        activated = false;
+        this.GetComponent<Rigidbody2D>().simulated = false;
+        this.GetComponent<SpriteRenderer>().sprite = aliveSprite;
+        this.GetComponent<Transform>().position = initialPosition;
     }
 }

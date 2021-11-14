@@ -96,7 +96,7 @@ Rigidbody2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8524632686831075510}
   m_BodyType: 0
-  m_Simulated: 1
+  m_Simulated: 0
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
@@ -194,5 +194,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  MovePerFrame: 0.03
   projectile: {fileID: 5081539241674843937, guid: e508a5acb17a7c640beb56a8161930e4, type: 3}
+  aliveSprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
   deadSprite: {fileID: 21300000, guid: 655404d23f8e149438b5399c6a7e1da5, type: 3}
+  selectButton: {fileID: 655651831461426991, guid: 5046672185e707940963d072f0de3811, type: 3}
