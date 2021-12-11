@@ -13,7 +13,6 @@ public class MyNetworkManager : NetworkManager
     public override void OnStartServer()
     {
        Debug.Log("Server Started");
-       SceneManager.LoadScene("Level_Test", LoadSceneMode.Additive);
        base.OnStartServer();
     }
 
@@ -29,6 +28,7 @@ public class MyNetworkManager : NetworkManager
         playerConns.Add(conn, currentTeamNumber);
         currentTeamNumber++;
         base.OnClientConnect(conn);
+        LoadLevel();
     }
 
 
@@ -43,4 +43,6 @@ public class MyNetworkManager : NetworkManager
     {
         SceneManager.LoadScene(startLevelName, LoadSceneMode.Additive);
     }
+
+
 }

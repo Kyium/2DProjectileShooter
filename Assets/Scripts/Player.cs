@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class Player : NetworkBehaviour
 {
-    [SerializeField] private float MovePerFrame = 0.03f;
+    [SerializeField] private float MovePerFrame = 0.015f;
     [SerializeField] private GameObject projectile;
     [SerializeField] private Sprite aliveSprite;
     [SerializeField] private Sprite deadSprite;
