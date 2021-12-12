@@ -14,6 +14,7 @@ public class Player : NetworkBehaviour
     [SerializeField] private Sprite aliveSprite;
     [SerializeField] private Sprite deadSprite;
     [SerializeField] private GameObject selectButton;
+    [SyncVar] public string team = "none";
     private float health = 100f;
     private float fuel = 150f;
     private float jetpack = 80f;
@@ -162,6 +163,10 @@ public class Player : NetworkBehaviour
         this.GetComponent<SpriteRenderer>().sprite = aliveSprite;
     }
 
+    private void setTeam(string teamName)
+    {
+        team = teamName;
+    }
     private void deactivate()
     {
         activated = false;
