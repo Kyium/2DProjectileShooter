@@ -15,6 +15,7 @@ public class Player : NetworkBehaviour
     [SerializeField] private Sprite deadSprite;
     [SerializeField] private GameObject selectButton;
     [SyncVar] public string team = "none";
+    [SerializeField] [SyncVar] public int id = 0;
     private float health = 100f;
     private float fuel = 150f;
     private float jetpack = 80f;
