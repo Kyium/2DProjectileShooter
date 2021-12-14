@@ -15,7 +15,7 @@ public class MyNetworkManager : NetworkManager
     [SerializeField] private string startLevelName = "Level_Test";
     public override void OnStartServer()
     {
-        Debug.Log("Server Started");
+        Debug.Log("Server Started: " + networkAddress);
         base.OnStartServer();
         NetworkServer.RegisterHandler<PlayerMessage>(onCreatePlayer);
         LoadLevel();
@@ -24,6 +24,7 @@ public class MyNetworkManager : NetworkManager
     {
         Debug.Log("Server Stopped");
         base.OnStopServer();
+        Shutdown();
     }
     public override void OnClientConnect(NetworkConnection conn)
     {

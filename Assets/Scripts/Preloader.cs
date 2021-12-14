@@ -12,7 +12,6 @@ public class Preloader : MonoBehaviour
             {
                 SceneManager.LoadScene("GameScene");
                 //FindObjectOfType<MyNetworkManager>().StartServer();
-                Debug.Log(FindObjectOfType<MyNetworkManager>().networkAddress);
             }
         }
     }
