@@ -18,6 +18,7 @@ public class MyNetworkManager : NetworkManager
         Debug.Log("Server Started");
         base.OnStartServer();
         NetworkServer.RegisterHandler<PlayerMessage>(onCreatePlayer);
+        LoadLevel();
     }
     public override void OnStopServer()
     {
@@ -26,17 +27,29 @@ public class MyNetworkManager : NetworkManager
     }
     public override void OnClientConnect(NetworkConnection conn)
     {
+        Application.targetFrameRate = 60;
         Debug.Log("Connected to server");
         base.OnClientConnect(conn);
-        playerConns.Add(conn, currentTeamNumber);
         PlayerMessage message = new PlayerMessage() 
         {
             team = currentTeamNumber.ToString()
         };
-        LoadLevel();
         conn.Send(message);
+        LoadLevel();
+    }
+
+    public override void OnServerAddPlayer(NetworkConnection conn)
+    {
+        base.OnServerAddPlayer(conn);
         currentTeamNumber++;
-    }   
+    }
+
+    public override void OnServerConnect(NetworkConnection conn)
+    {
+        Debug.Log("Client connected");
+        base.OnServerConnect(conn);
+    }
+
     public override void OnClientDisconnect(NetworkConnection conn)
     {
         Debug.Log("Disconnected from server");
