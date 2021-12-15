@@ -18,22 +18,12 @@ public class Player : NetworkBehaviour
     private float jetpack = 80f;
     [SerializeField] private readonly float MovePerFrame = 0.055f;
     [SerializeField] private GameObject projectile;
-    [SerializeField] private GameObject selectButton;
 
     // Start is called before the first frame update
     private void Start()
     {
         if (activated) activate();
     }
-
-    [Command]
-    private void CmdSpawnServerControls()
-    {
-        selectButton = Instantiate(selectButton, new Vector3(0, 0, 0), Quaternion.identity);
-        NetworkServer.Spawn(selectButton, connectionToClient);
-        selectButton.GetComponent<NetworkIdentity>().AssignClientAuthority(connectionToClient);
-    }
-
     // Update is called once per frame
     private void Update()
     {

@@ -8,7 +8,6 @@ using UnityEngine.SceneManagement;
 
 public class MyNetworkManager : NetworkManager
 {
-    private Dictionary<NetworkConnection, int> playerConns = new Dictionary<NetworkConnection, int>();
     private int currentTeamNumber = 1;
     [SerializeField] private string startLevelName = "Level_Test";
     public override void OnStartServer()
@@ -26,8 +25,6 @@ public class MyNetworkManager : NetworkManager
     public override void OnClientConnect(NetworkConnection conn)
     {
         Debug.Log("Connected to server");
-        playerConns.Add(conn, currentTeamNumber);
-        currentTeamNumber++;
         base.OnClientConnect(conn);
         LoadLevel();
         Application.targetFrameRate = 60;
@@ -37,7 +34,6 @@ public class MyNetworkManager : NetworkManager
     public override void OnClientDisconnect(NetworkConnection conn)
     {
         Debug.Log("Disconnected from server");
-        playerConns.Remove(conn);
         base.OnClientDisconnect(conn);
     }
 
