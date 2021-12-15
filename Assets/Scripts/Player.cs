@@ -1,11 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using UnityEngine.UI;
-using System;
-using Unity.Mathematics;
-using UnityEngine.SceneManagement;
 
 public class Player : NetworkBehaviour
 {
@@ -53,15 +48,19 @@ public class Player : NetworkBehaviour
     void Update()
     {
         HandleInput();
+<<<<<<< Updated upstream
         if (health < 0) health = 0;
         if (fuel < 0) fuel = 0;
         if (jetpack < 0) jetpack = 0;
+=======
+>>>>>>> Stashed changes
     }
 
     private void HandleInput()
     {
-        if (!isDead && isLocalPlayer)
+        if (isLocalPlayer)
         {
+<<<<<<< Updated upstream
             if (Input.GetKey(KeyCode.LeftArrow) && fuel > 0)
             {
                 var position = this.transform.position;
@@ -95,8 +94,60 @@ public class Player : NetworkBehaviour
                 {
                     this.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, JetpackYVelocityPerFrame));
                     jetpack -= JetpackPerFrame;
+=======
+            if (!isDead)
+            {
+                if (Input.GetKey(KeyCode.LeftArrow) && fuel > 0)
+                {
+                    var position = this.transform.position;
+                    position.x -= MovePerFrame;
+                    fuel -= FuelPerMoveFrame;
+                    this.transform.position = position;
                     updateLocalUI();
                 }
+                else if (Input.GetKey(KeyCode.RightArrow) && fuel > 0)
+                {
+                    var position = this.transform.position;
+                    position.x += MovePerFrame;
+                    fuel -= FuelPerMoveFrame;
+                    this.transform.position = position;
+                    updateLocalUI();
+                }
+
+                if (Input.GetKeyDown(KeyCode.UpArrow) && this.GetComponent<Rigidbody2D>().velocity.y == 0 && fuel > 0)
+                {
+                    this.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 280));
+                    fuel -= FuelPerJump;
+>>>>>>> Stashed changes
+                    updateLocalUI();
+                }
+
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    CmdSpawnProjectile();
+                }
+
+                if (Input.GetKey(KeyCode.DownArrow) && this.GetComponent<Rigidbody2D>().velocity.y != 0 && jetpack > 0)
+                {
+                    if (this.GetComponent<Rigidbody2D>().velocity.y < JetpackMaxYVelocity)
+                    {
+                        this.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, JetpackYVelocityPerFrame));
+                        jetpack -= JetpackPerFrame;
+                        updateLocalUI();
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.X)) // Debug controls
+                {
+                    fuel += 100;
+                    jetpack += 100;
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.Z) && isDead)
+            {
+                health = 100;
+                activate();
+                CmdSetAlive();
             }
         }
     }
@@ -141,10 +192,27 @@ public class Player : NetworkBehaviour
         }
     }
 
+<<<<<<< Updated upstream
+=======
+    [Command]
+    private void CmdSetDead()
+    {
+        deactivate();
+    }
+
+    [Command]
+    private void CmdSetAlive()
+    {
+        activate();
+    }
+>>>>>>> Stashed changes
     void updateLocalUI()
     {
         if (isLocalPlayer)
         {
+            if (health < 0) health = 0;
+            if (fuel < 0) fuel = 0;
+            if (jetpack < 0) jetpack = 0;
             foreach (Text label in FindObjectOfType<Canvas>().GetComponentsInChildren<Text>())
             {
                 if (label.name == "Health") label.text = "Health: " + health;
@@ -158,6 +226,7 @@ public class Player : NetworkBehaviour
     private void activate()
     {
         activated = true;
+        isDead = false;
         this.GetComponent<Rigidbody2D>().simulated = true;
         this.GetComponent<SpriteRenderer>().sprite = aliveSprite;
     }
@@ -165,6 +234,7 @@ public class Player : NetworkBehaviour
     private void deactivate()
     {
         activated = false;
+        isDead = true;
         this.GetComponent<Rigidbody2D>().simulated = false;
         this.GetComponent<SpriteRenderer>().sprite = aliveSprite;
         this.GetComponent<Transform>().position = initialPosition;
