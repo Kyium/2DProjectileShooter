@@ -87,7 +87,7 @@ public class Player : NetworkBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Z) && isDead)
+        if (Input.GetKeyDown(KeyCode.Z) && isDead && isLocalPlayer)
         {
             health = 100;
             activate();
@@ -118,7 +118,7 @@ public class Player : NetworkBehaviour
         {
             health -= collision.collider.gameObject.GetComponent<Projectile>().getDamage();
             deadCheck();
-            CmdDestroyProjectile(collision.collider.gameObject);
+            if (isLocalPlayer) CmdDestroyProjectile(collision.collider.gameObject);
             updateLocalUI();
         }
     }

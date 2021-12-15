@@ -155,7 +155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offsetX: 0
-  offsetY: 60
+  offsetY: 80
 --- !u!114 &80780819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,12 +199,12 @@ MonoBehaviour:
   serverTickRate: 30
   offlineScene: Assets/Scenes/TitleScreen.unity
   onlineScene: 
-  transport: {fileID: 0}
+  transport: {fileID: 80780819}
   networkAddress: localhost
-  maxConnections: 16
+  maxConnections: 8
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 8524632686831075510, guid: 92f64850f0643444e9dbc471f5782b92, type: 3}
-  autoCreatePlayer: 1
+  autoCreatePlayer: 0
   playerSpawnMethod: 0
   spawnPrefabs:
   - {fileID: 5081539241674843937, guid: e508a5acb17a7c640beb56a8161930e4, type: 3}
