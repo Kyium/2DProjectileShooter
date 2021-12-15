@@ -14,7 +14,6 @@ public class Player : NetworkBehaviour
     [SerializeField] private Sprite aliveSprite;
     [SerializeField] private Sprite deadSprite;
     [SyncVar] public string team = "none";
-    [SerializeField] [SyncVar] public int id = 0;
     private float health = 100f;
     private float fuel = 150f;
     private float jetpack = 80f;
@@ -25,12 +24,9 @@ public class Player : NetworkBehaviour
     private readonly float JetpackPerFrame = 0.65f;
     private readonly float JetpackYVelocityPerFrame = 23;
     private readonly float JetpackMaxYVelocity = 30;
-    private Vector3 initialPosition;
-
     // Start is called before the first frame update
     void Start()
     {
-        initialPosition = this.GetComponent<Transform>().position;
         if (activated)
         {
             activate();
@@ -95,7 +91,6 @@ public class Player : NetworkBehaviour
                 this.GetComponent<Transform>().position.y + 1, 0), Quaternion.identity);
         newProjectile.GetComponent<Rigidbody2D>().AddForce(new Vector2(250, 150));
         NetworkServer.Spawn(newProjectile);
-
     }
 
     [Command]
@@ -151,7 +146,7 @@ public class Player : NetworkBehaviour
         this.GetComponent<Rigidbody2D>().simulated = true;
         this.GetComponent<Transform>().localScale = new Vector3(0.3981007f, 0.6221094f, 1f);
         this.GetComponent<SpriteRenderer>().sprite = aliveSprite;
-
+        if (isLocalPlayer) this.GetComponent<SpriteRenderer>().color = Color.green;
     }
 
     public void setTeam(string teamName)
@@ -164,7 +159,6 @@ public class Player : NetworkBehaviour
         this.GetComponent<Rigidbody2D>().simulated = false;
         this.GetComponent<Transform>().localScale = new Vector3(0.2f, 0.6f, 1f);
         this.GetComponent<SpriteRenderer>().sprite = deadSprite;
-
+        this.GetComponent<SpriteRenderer>().color = Color.white;
     }
-
 }
