@@ -1,43 +1,33 @@
-using UnityEngine;
 using Mirror;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class Player : NetworkBehaviour
 {
-    [SerializeField] private float MovePerFrame = 0.015f;
-    [SerializeField] private GameObject projectile;
+    private readonly float FuelPerJump = 1.0f;
+    private readonly float FuelPerMoveFrame = 0.1f;
+    private readonly float JetpackMaxYVelocity = 10;
+    private readonly float JetpackPerFrame = 0.3f;
+    private readonly float JetpackYVelocityPerFrame = 20;
+    private bool activated = true;
     [SerializeField] private Sprite aliveSprite;
     [SerializeField] private Sprite deadSprite;
-    [SerializeField] private GameObject selectButton;
-    private float health = 100f;
     private float fuel = 150f;
+    private float health = 100f;
+    private bool isDead;
     private float jetpack = 80f;
-    private bool isDead = false;
-    private bool activated = true;
-    private readonly float FuelPerMoveFrame = 0.1f;
-    private readonly float FuelPerJump = 1.0f;
-    private readonly float JetpackPerFrame = 0.3f;
-    private readonly float JetpackYVelocityPerFrame = 10;
-    private readonly float JetpackMaxYVelocity = 30;
-    private Vector3 initialPosition;
+    [SerializeField] private readonly float MovePerFrame = 0.055f;
+    [SerializeField] private GameObject projectile;
+    [SerializeField] private GameObject selectButton;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        initialPosition = this.GetComponent<Transform>().position;
-        if (isServer)
-        {
-            // CmdSpawnServerControls();
-        }
-
-        if (activated)
-        {
-            this.GetComponent<Rigidbody2D>().simulated = true;
-        }
+        if (activated) activate();
     }
 
     [Command]
-    void CmdSpawnServerControls()
+    private void CmdSpawnServerControls()
     {
         selectButton = Instantiate(selectButton, new Vector3(0, 0, 0), Quaternion.identity);
         NetworkServer.Spawn(selectButton, connectionToClient);
@@ -45,123 +35,84 @@ public class Player : NetworkBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         HandleInput();
-<<<<<<< Updated upstream
         if (health < 0) health = 0;
         if (fuel < 0) fuel = 0;
         if (jetpack < 0) jetpack = 0;
-=======
->>>>>>> Stashed changes
     }
 
     private void HandleInput()
     {
-        if (isLocalPlayer)
+        if (!isDead && isLocalPlayer)
         {
-<<<<<<< Updated upstream
             if (Input.GetKey(KeyCode.LeftArrow) && fuel > 0)
             {
-                var position = this.transform.position;
+                var position = transform.position;
                 position.x -= MovePerFrame;
                 fuel -= FuelPerMoveFrame;
-                this.transform.position = position;
+                transform.position = position;
                 updateLocalUI();
             }
             else if (Input.GetKey(KeyCode.RightArrow) && fuel > 0)
             {
-                var position = this.transform.position;
+                var position = transform.position;
                 position.x += MovePerFrame;
                 fuel -= FuelPerMoveFrame;
-                this.transform.position = position;
+                transform.position = position;
                 updateLocalUI();
             }
 
-            if (Input.GetKeyDown(KeyCode.UpArrow) && this.GetComponent<Rigidbody2D>().velocity.y == 0 && fuel > 0)
+            if (Input.GetKeyDown(KeyCode.UpArrow) && GetComponent<Rigidbody2D>().velocity.y == 0 &&
+                fuel > 0)
             {
-                this.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 280));
+                GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 280));
                 fuel -= FuelPerJump;
                 updateLocalUI();
             }
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                CmdSpawnProjectile();
-            }
-            if (Input.GetKey(KeyCode.DownArrow) && this.GetComponent<Rigidbody2D>().velocity.y != 0 && jetpack > 0)
-            {
-                if (this.GetComponent<Rigidbody2D>().velocity.y < JetpackMaxYVelocity)
+
+            if (Input.GetKeyDown(KeyCode.Space)) CmdSpawnProjectile();
+
+            if (Input.GetKey(KeyCode.DownArrow) && GetComponent<Rigidbody2D>().velocity.y != 0 &&
+                jetpack > 0)
+                if (GetComponent<Rigidbody2D>().velocity.y < JetpackMaxYVelocity)
                 {
-                    this.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, JetpackYVelocityPerFrame));
+                    GetComponent<Rigidbody2D>().AddForce(new Vector2(0, JetpackYVelocityPerFrame));
                     jetpack -= JetpackPerFrame;
-=======
-            if (!isDead)
+                    updateLocalUI();
+                }
+
+            if (Input.GetKeyDown(KeyCode.X)) // Debug controls
             {
-                if (Input.GetKey(KeyCode.LeftArrow) && fuel > 0)
-                {
-                    var position = this.transform.position;
-                    position.x -= MovePerFrame;
-                    fuel -= FuelPerMoveFrame;
-                    this.transform.position = position;
-                    updateLocalUI();
-                }
-                else if (Input.GetKey(KeyCode.RightArrow) && fuel > 0)
-                {
-                    var position = this.transform.position;
-                    position.x += MovePerFrame;
-                    fuel -= FuelPerMoveFrame;
-                    this.transform.position = position;
-                    updateLocalUI();
-                }
-
-                if (Input.GetKeyDown(KeyCode.UpArrow) && this.GetComponent<Rigidbody2D>().velocity.y == 0 && fuel > 0)
-                {
-                    this.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 280));
-                    fuel -= FuelPerJump;
->>>>>>> Stashed changes
-                    updateLocalUI();
-                }
-
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    CmdSpawnProjectile();
-                }
-
-                if (Input.GetKey(KeyCode.DownArrow) && this.GetComponent<Rigidbody2D>().velocity.y != 0 && jetpack > 0)
-                {
-                    if (this.GetComponent<Rigidbody2D>().velocity.y < JetpackMaxYVelocity)
-                    {
-                        this.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, JetpackYVelocityPerFrame));
-                        jetpack -= JetpackPerFrame;
-                        updateLocalUI();
-                    }
-                }
-
-                if (Input.GetKeyDown(KeyCode.X)) // Debug controls
-                {
-                    fuel += 100;
-                    jetpack += 100;
-                }
+                fuel += 100;
+                jetpack += 100;
+                updateLocalUI();
             }
-            if (Input.GetKeyDown(KeyCode.Z) && isDead)
+            if (Input.GetKeyDown(KeyCode.C))
             {
-                health = 100;
-                activate();
-                CmdSetAlive();
+                GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                transform.position = Vector3.zero;
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Z) && isDead)
+        {
+            health = 100;
+            activate();
+            CmdSetAlive();
         }
     }
 
     [Command]
     private void CmdSpawnProjectile()
     {
-        GameObject newProjectile = projectile;
+        var newProjectile = projectile;
         newProjectile = Instantiate(newProjectile,
-            new Vector3(this.GetComponent<Transform>().position.x + 1,
-                this.GetComponent<Transform>().position.y + 1, 0), Quaternion.identity);
-        newProjectile.GetComponent<Rigidbody2D>().AddForce(new Vector2(250, 150));
+            new Vector3(GetComponent<Transform>().position.x + 0.5f,
+                GetComponent<Transform>().position.y + 0.5f, 0), Quaternion.identity);
+        newProjectile.GetComponent<Rigidbody2D>().AddForce(new Vector2(225, 150));
         NetworkServer.Spawn(newProjectile);
-
     }
 
     [Command]
@@ -174,7 +125,7 @@ public class Player : NetworkBehaviour
     {
         if (collision.collider.gameObject.name.Contains("Projectile"))
         {
-            this.health -= collision.collider.gameObject.GetComponent<Projectile>().getDamage();
+            health -= collision.collider.gameObject.GetComponent<Projectile>().getDamage();
             deadCheck();
             CmdDestroyProjectile(collision.collider.gameObject);
             updateLocalUI();
@@ -183,17 +134,13 @@ public class Player : NetworkBehaviour
 
     private void deadCheck()
     {
-        if (this.health <= 0 && !isDead)
+        if (health <= 0 && !isDead)
         {
-            this.GetComponent<SpriteRenderer>().sprite = deadSprite;
-            this.GetComponent<Transform>().localScale = new Vector3(0.2f, 0.6f, 1f);
-            this.GetComponent<Rigidbody2D>().simulated = false;
-            isDead = true;
+            deactivate();
+            if (isLocalPlayer) CmdSetDead();
         }
     }
 
-<<<<<<< Updated upstream
-=======
     [Command]
     private void CmdSetDead()
     {
@@ -205,21 +152,20 @@ public class Player : NetworkBehaviour
     {
         activate();
     }
->>>>>>> Stashed changes
-    void updateLocalUI()
+
+    private void updateLocalUI()
     {
         if (isLocalPlayer)
         {
             if (health < 0) health = 0;
             if (fuel < 0) fuel = 0;
             if (jetpack < 0) jetpack = 0;
-            foreach (Text label in FindObjectOfType<Canvas>().GetComponentsInChildren<Text>())
+            foreach (var label in FindObjectOfType<Canvas>().GetComponentsInChildren<Text>())
             {
                 if (label.name == "Health") label.text = "Health: " + health;
                 if (label.name == "Fuel") label.text = "Fuel: " + fuel.ToString("F1");
                 if (label.name == "Jetpack") label.text = "Jetpack: " + jetpack.ToString("F1");
             }
-
         }
     }
 
@@ -227,16 +173,17 @@ public class Player : NetworkBehaviour
     {
         activated = true;
         isDead = false;
-        this.GetComponent<Rigidbody2D>().simulated = true;
-        this.GetComponent<SpriteRenderer>().sprite = aliveSprite;
+        GetComponent<Rigidbody2D>().simulated = true;
+        GetComponent<SpriteRenderer>().sprite = aliveSprite;
+        if (isLocalPlayer) GetComponent<SpriteRenderer>().color = Color.green;
     }
 
     private void deactivate()
     {
         activated = false;
         isDead = true;
-        this.GetComponent<Rigidbody2D>().simulated = false;
-        this.GetComponent<SpriteRenderer>().sprite = aliveSprite;
-        this.GetComponent<Transform>().position = initialPosition;
+        GetComponent<Rigidbody2D>().simulated = false;
+        GetComponent<SpriteRenderer>().sprite = deadSprite;
+        GetComponent<SpriteRenderer>().color = Color.white;
     }
 }

@@ -1,8 +1,5 @@
-<<<<<<< Updated upstream
 using System.Collections;
-=======
 using System;
->>>>>>> Stashed changes
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -33,6 +30,7 @@ public class MyNetworkManager : NetworkManager
         currentTeamNumber++;
         base.OnClientConnect(conn);
         LoadLevel();
+        Application.targetFrameRate = 60;
     }
 
 
