@@ -133,8 +133,8 @@ GameObject:
   m_Component:
   - component: {fileID: 80780821}
   - component: {fileID: 80780820}
-  - component: {fileID: 80780819}
   - component: {fileID: 80780818}
+  - component: {fileID: 80780819}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -165,22 +165,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 80780817}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
+  m_Script: {fileID: 11500000, guid: c7424c1070fad4ba2a7a96b02fbeb4bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Port: 7777
-  DualMode: 1
+  port: 7777
   NoDelay: 1
-  Interval: 10
-  Timeout: 10000
-  FastResend: 2
-  CongestionWindow: 0
-  SendWindowSize: 4096
-  ReceiveWindowSize: 4096
-  NonAlloc: 1
-  debugLog: 0
-  statisticsGUI: 0
-  statisticsLog: 0
+  SendTimeout: 5000
+  ReceiveTimeout: 30000
+  serverMaxMessageSize: 16384
+  serverMaxReceivesPerTick: 10000
+  serverSendQueueLimitPerConnection: 10000
+  serverReceiveQueueLimitPerConnection: 10000
+  clientMaxMessageSize: 16384
+  clientMaxReceivesPerTick: 1000
+  clientSendQueueLimit: 10000
+  clientReceiveQueueLimit: 10000
 --- !u!114 &80780820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,7 +199,7 @@ MonoBehaviour:
   serverTickRate: 30
   offlineScene: Assets/Scenes/TitleScreen.unity
   onlineScene: 
-  transport: {fileID: 80780819}
+  transport: {fileID: 0}
   networkAddress: localhost
   maxConnections: 16
   authenticator: {fileID: 0}
@@ -212,6 +211,7 @@ MonoBehaviour:
   - {fileID: 626087824808198164, guid: 7b7bc7cecd086244db55806f707d5438, type: 3}
   - {fileID: 5328674844075004525, guid: 08c569820e6766149ae8ae6a97e39192, type: 3}
   - {fileID: 655651831461426991, guid: 5046672185e707940963d072f0de3811, type: 3}
+  currentTeamNumber: 1
   startLevelName: Level_Test
 --- !u!4 &80780821
 Transform:

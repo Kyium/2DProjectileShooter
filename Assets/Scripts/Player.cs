@@ -18,6 +18,7 @@ public class Player : NetworkBehaviour
     private float jetpack = 80f;
     [SerializeField] private readonly float MovePerFrame = 0.055f;
     [SerializeField] private GameObject projectile;
+    [SyncVar] public string team;
 
     // Start is called before the first frame update
     private void Start()
